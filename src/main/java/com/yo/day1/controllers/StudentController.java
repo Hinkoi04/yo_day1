@@ -1,10 +1,12 @@
 package com.yo.day1.controllers;
 
 import com.yo.day1.common.ApiResponse;
+import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Student;
 import com.yo.day1.dto.student.StudentResponse;
 import com.yo.day1.dto.student.StudentUpserRequest;
 import com.yo.day1.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ public class StudentController {
     }
 
     @PostMapping
-    ResponseEntity<StudentResponse> create(StudentUpserRequest req){
+    ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentUpserRequest req){
         return ResponseEntity.ok(studentService.create(req));
     }
 
@@ -41,7 +43,7 @@ public class StudentController {
     }
 
     @DeleteMapping(value = "/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id){
+    ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
         studentService.delete(id);
         return ResponseEntity.ok().build();
     }

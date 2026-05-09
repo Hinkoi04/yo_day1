@@ -1,5 +1,6 @@
 package com.yo.day1.service.impl;
 
+import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Student;
 import com.yo.day1.dto.parent.ParentRespone;
 import com.yo.day1.dto.student.StudentResponse;
@@ -9,6 +10,7 @@ import com.yo.day1.responsitory.StudentResponsitory;
 import com.yo.day1.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,8 +57,12 @@ public class StudentServiceImpl implements StudentService {
         return map(result);
     }
 
-    public void delete(Long id){
-        studentResponsitory.deleteById(id);
+    public void delete(Long id) throws NotFoundException{
+        if (studentResponsitory.existsById(id)){
+            studentResponsitory.deleteById(id);
+        }else {
+            throw new NotFoundException("Delete error");
+        }
     }
 
     private StudentResponse map2(Student student){
