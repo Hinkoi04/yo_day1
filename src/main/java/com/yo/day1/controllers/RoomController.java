@@ -19,7 +19,7 @@ public class RoomController {
     private final RoomService roomService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','ACADEMIC_STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiResponse<Page<RoomResponse>> findAll(
             @RequestParam(required = false) String search,
             Pageable pageable) {
@@ -27,25 +27,21 @@ public class RoomController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','ACADEMIC_STAFF')")
     public ApiResponse<RoomResponse> create(@Valid @RequestBody RoomUpsertRequest request) {
         return ApiResponse.success("Room created", roomService.create(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','ACADEMIC_STAFF')")
     public ApiResponse<RoomResponse> update(@PathVariable Long id, @Valid @RequestBody RoomUpsertRequest request) {
         return ApiResponse.success("Room updated", roomService.update(id, request));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','ACADEMIC_STAFF')")
     public ApiResponse<RoomResponse> findById(@PathVariable Long id) {
         return ApiResponse.success(roomService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','ACADEMIC_STAFF')")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         roomService.delete(id);
         return ApiResponse.success("Room deleted", null);

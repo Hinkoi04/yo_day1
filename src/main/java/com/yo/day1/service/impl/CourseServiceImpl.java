@@ -17,6 +17,9 @@ public class CourseServiceImpl implements CourseService {
     public List<Courses> findAll(){
         return courseResponsitory.findAll();
     }
+    public List<Courses> findByCourseActive(){
+        return courseResponsitory.findByCourseActive();
+    }
 
     public Optional<Courses> findById(Long id){
         return courseResponsitory.findById(id);

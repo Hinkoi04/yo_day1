@@ -20,6 +20,6 @@ public class AppConfig {
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Sử dụng thuật toán BCrypt mạnh mẽ nhất
+        return new BCryptPasswordEncoder();
     }
 }

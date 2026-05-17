@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface CourseService {
     List<Courses> findAll();
     Optional<Courses> findById(Long id);
+    List<Courses> findByCourseActive();
     Courses save(Courses course);
     Courses update(Long id, Courses course);
     void delete(Long id);

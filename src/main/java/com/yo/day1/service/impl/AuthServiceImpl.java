@@ -1,5 +1,6 @@
 package com.yo.day1.service.impl;
 
+import com.yo.day1.common.exception.BadRequestException;
 import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.config.AppJwtProperties;
 import com.yo.day1.domain.entity.RefreshTokenSession;
@@ -11,7 +12,7 @@ import com.yo.day1.security.JwtService;
 import com.yo.day1.service.AuthService;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final AppJwtProperties jwtProperties;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByUsername(request.username())
                 .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
