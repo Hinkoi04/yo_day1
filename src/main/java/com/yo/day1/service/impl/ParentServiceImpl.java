@@ -1,7 +1,7 @@
 package com.yo.day1.service.impl;
 
 import com.yo.day1.domain.entity.Parents;
-import com.yo.day1.responsitory.ParentResponsitory;
+import com.yo.day1.repository.ParentResponsitory;
 import com.yo.day1.service.ParentService;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.yo.day1.service.impl;
 
 import com.yo.day1.domain.entity.Courses;
-import com.yo.day1.responsitory.CourseResponsitory;
+import com.yo.day1.repository.CourseResponsitory;
 import com.yo.day1.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

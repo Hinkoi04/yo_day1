@@ -5,12 +5,11 @@ import com.yo.day1.domain.entity.Student;
 import com.yo.day1.dto.parent.ParentRespone;
 import com.yo.day1.dto.student.StudentResponse;
 import com.yo.day1.dto.student.StudentUpserRequest;
-import com.yo.day1.responsitory.ParentResponsitory;
-import com.yo.day1.responsitory.StudentResponsitory;
+import com.yo.day1.repository.ParentResponsitory;
+import com.yo.day1.repository.StudentResponsitory;
 import com.yo.day1.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

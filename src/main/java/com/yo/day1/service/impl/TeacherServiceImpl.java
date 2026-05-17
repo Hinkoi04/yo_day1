@@ -1,7 +1,7 @@
 package com.yo.day1.service.impl;
 
 import com.yo.day1.domain.entity.Teachers;
-import com.yo.day1.responsitory.TeacherResponsitory;
+import com.yo.day1.repository.TeacherResponsitory;
 import com.yo.day1.service.TeacherService;
 import org.springframework.stereotype.Service;
 
