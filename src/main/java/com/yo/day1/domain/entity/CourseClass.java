@@ -4,11 +4,17 @@ import com.yo.day1.domain.AuditableEntity;
 import com.yo.day1.domain.enums.CoursesClassStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Table(name = "course_classes")
 public class CourseClass extends AuditableEntity {
 
     @Column(columnDefinition = "varchar(20)")
@@ -17,7 +23,7 @@ public class CourseClass extends AuditableEntity {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "courses_id", nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private Courses courses;
 
     @ManyToOne
@@ -36,13 +42,13 @@ public class CourseClass extends AuditableEntity {
     @JoinColumn(name = "assistent_teacher_id")
     private Teachers assistantTeacher;
 
-    private LocalTime startDate;
-    private LocalTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     private int maxStudents;
 
     @Column(columnDefinition = "decimal",precision = 12,scale = 2)
-    private double tuitionFee;
+    private BigDecimal tuitionFee;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 20)

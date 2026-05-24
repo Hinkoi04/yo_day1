@@ -11,4 +11,5 @@ public interface AuthService {
     AuthResponse refresh(RefreshTokenRequest request);
     void changePassword(String username, ChangePasswordRequest request) throws BadRequestException, NotFoundException;
     CurrentUserResponse me(String username) throws NotFoundException, BadRequestException;
+    User findActiveUserByUsername(String username) throws NotFoundException, BadRequestException;
 }
