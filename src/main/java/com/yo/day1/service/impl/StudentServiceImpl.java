@@ -11,6 +11,7 @@ import com.yo.day1.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -92,5 +93,18 @@ public class StudentServiceImpl implements StudentService {
         result.setUpdatedAt(student.getUpdatedAt());
 
         return result;
+    }
+    @Transactional(readOnly = true)
+    public Student getStudentForParent(Long studentId, Long parentId) {
+        Student student = getStudent(studentId);
+        if (student.getParent() == null || !student.getParent().getId().equals(parentId)) {
+            throw new org.springframework.security.access.AccessDeniedException("Student does not belong to current parent account");
+        }
+        return student;
+    }
+
+    public Student getStudent(Long id) {
+        return studentResponsitory.findById(id)
+                .orElseThrow(() -> new NotFoundException("Student not found: " + id));
     }
 }

@@ -5,17 +5,18 @@ import com.yo.day1.domain.entity.CourseClass;
 import com.yo.day1.dto.courseclass.CourseClassResponse;
 import com.yo.day1.dto.courseclass.CourseClassUpsertRequest;
 import com.yo.day1.repository.*;
-import com.yo.day1.service.CoursesClassService;
+import com.yo.day1.service.CourseClassService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CoursesClassServiceImpl implements CoursesClassService {
+public class CoursesClassServiceImpl implements CourseClassService {
     private final CoursesClassRepository coursesClassRepository;
     private final ScheduleSlotRepository scheduleSlotRepository;
     private final CourseResponsitory courseResponsitory;
@@ -89,6 +90,11 @@ public class CoursesClassServiceImpl implements CoursesClassService {
         }else {
             throw new NotFoundException("CoursesClass not Exists");
         }
+    }
+    @Transactional(readOnly = true)
+    public CourseClass getCourseClass(Long id) {
+        return coursesClassRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course class not found: " + id));
     }
 
 }

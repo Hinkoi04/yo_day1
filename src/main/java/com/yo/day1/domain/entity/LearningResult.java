@@ -37,3 +37,4 @@ public class LearningResult extends AuditableEntity {
     @JoinColumn(name = "created_by_user_id")
     private User createdByUser;
 }
+
