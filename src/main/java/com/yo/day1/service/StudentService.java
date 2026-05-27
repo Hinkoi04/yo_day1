@@ -16,4 +16,6 @@ public interface StudentService {
     void delete(Long id) throws NotFoundException;
     Student getStudentForParent(Long studentId, Long parentId);
     Student getStudent(Long id);
+    List<StudentResponse> searchByName(String name);
+    List<StudentResponse> filterByPerformance(String performance);
 }

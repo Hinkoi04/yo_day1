@@ -1,5 +1,6 @@
 package com.yo.day1.service.impl;
 
+import com.yo.day1.common.exception.BadRequestException;
 import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Student;
 import com.yo.day1.dto.parent.ParentRespone;
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -106,5 +108,39 @@ public class StudentServiceImpl implements StudentService {
     public Student getStudent(Long id) {
         return studentResponsitory.findById(id)
                 .orElseThrow(() -> new NotFoundException("Student not found: " + id));
+    }
+    public List<StudentResponse> searchByName(String name) {
+        List<Student> students = studentResponsitory.findByFullNameContainingIgnoreCase(name);
+        return students.stream()
+                .map(this::map)
+                .toList();
+    }
+
+    public List<StudentResponse> filterByPerformance(String performance) {
+        BigDecimal minScore = BigDecimal.ZERO;
+        BigDecimal maxScore = BigDecimal.TEN;
+
+        switch (performance.toUpperCase()) {
+            case "GIOI":
+                minScore = new BigDecimal("8.0");
+                break;
+            case "KHA":
+                minScore = new BigDecimal("6.5");
+                maxScore = new BigDecimal("7.99");
+                break;
+            case "TRUNG_BINH":
+                minScore = new BigDecimal("5.0");
+                maxScore = new BigDecimal("6.49");
+                break;
+            case "YEU":
+                maxScore = new BigDecimal("4.99");
+                break;
+            default:
+                throw new BadRequestException("Học lực k hợp lệ");
+        }
+        List<Student> students = studentResponsitory.findByLatestScoreBetween(minScore, maxScore);
+        return students.stream()
+                .map(student -> mapper.map(student, StudentResponse.class))
+                .toList();
     }
 }

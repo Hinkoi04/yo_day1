@@ -47,4 +47,14 @@ public class StudentController {
         studentService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/search")
+    public ApiResponse<List<StudentResponse>> searchStudents(@RequestParam String name) {
+        return ApiResponse.success(studentService.searchByName(name));
+    }
+
+    @GetMapping("/filter")
+    public ApiResponse<List<StudentResponse>> filterStudents(@RequestParam String performance) {
+        return ApiResponse.success(studentService.filterByPerformance(performance));
+    }
 }

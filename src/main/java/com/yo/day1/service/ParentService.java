@@ -11,4 +11,5 @@ public interface ParentService {
     Parents save(Parents parents);
     Parents update(Long id, Parents parents);
     void delete(Long id);
+    void resetPassword(Long id);
 }
