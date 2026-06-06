@@ -11,10 +11,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "notifications")
+@Setter
+@Getter
 public class Notification extends AuditableEntity {
+
     @Enumerated(EnumType.STRING)
     @Column(name = "recipient_type", nullable = false, length = 20)
     private NotificationRecipientType recipientType;
@@ -45,7 +46,8 @@ public class Notification extends AuditableEntity {
     @Column(name = "is_read", nullable = false)
     private Boolean isRead = false;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+//    @CreationTimestamp
+//    @Column(name = "created_at"; nullable = false; updatable = false)
+//    private LocalDateTime createdAt;
+
 }

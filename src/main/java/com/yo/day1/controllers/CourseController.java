@@ -1,7 +1,7 @@
 package com.yo.day1.controllers;
 
 import com.yo.day1.common.ApiResponse;
-import com.yo.day1.domain.entity.Courses;
+import com.yo.day1.domain.entity.Course;
 import com.yo.day1.service.CourseService;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +18,19 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Courses>>> getCourse(){
+    public ResponseEntity<ApiResponse<List<Course>>> getCourse(){
         return ResponseEntity.ok(ApiResponse.success(courseService.findAll()));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Courses>> getCourseById(@PathParam("id") Long id){
+    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathParam("id") Long id){
 
 //        return courseService.findById(id).map(value ->
 //                        ResponseEntity.ok(ApiResponse.success(value)))
 //                .orElseGet(() -> ResponseEntity.notFound().build());
 
 
-        Optional<Courses> course = courseService.findById(id);
+        Optional<Course> course = courseService.findById(id);
         if(course.isPresent()){
             return ResponseEntity.ok(ApiResponse.success(course.get()));
         }else {
@@ -39,20 +39,20 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Courses>> create(@RequestBody Courses course){
+    public ResponseEntity<ApiResponse<Course>> create(@RequestBody Course course){
         return ResponseEntity.ok(ApiResponse.success(courseService.save(course)));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Courses>> update(@PathVariable("id") Long id , @RequestBody Courses course){
+    public ResponseEntity<ApiResponse<Course>> update(@PathVariable("id") Long id , @RequestBody Course course){
         try{
-            Courses update= courseService.update(id,course);
+            Course update= courseService.update(id,course);
             return ResponseEntity.ok(ApiResponse.success(update));
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Courses>> delete(@PathVariable("id") Long id){
+    public ResponseEntity<ApiResponse<Course>> delete(@PathVariable("id") Long id){
         courseService.delete(id);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

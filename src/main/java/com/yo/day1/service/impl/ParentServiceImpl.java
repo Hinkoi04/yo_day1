@@ -4,7 +4,7 @@ import com.yo.day1.common.exception.BadRequestException;
 import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Parents;
 import com.yo.day1.domain.entity.User;
-import com.yo.day1.repository.ParentResponsitory;
+import com.yo.day1.repository.ParentRepository;
 import com.yo.day1.repository.UserRepository;
 import com.yo.day1.service.ParentService;
 import jakarta.transaction.Transactional;
@@ -16,11 +16,11 @@ import java.util.Optional;
 
 @Service
 public class ParentServiceImpl implements ParentService {
-    private final ParentResponsitory parentRespository;
+    private final ParentRepository parentRespository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public ParentServiceImpl(ParentResponsitory parentRespository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public ParentServiceImpl(ParentRepository parentRespository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.parentRespository = parentRespository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;

@@ -2,9 +2,8 @@ package com.yo.day1.controllers;
 
 import com.yo.day1.common.ApiResponse;
 import com.yo.day1.common.exception.NotFoundException;
-import com.yo.day1.domain.entity.Student;
 import com.yo.day1.dto.student.StudentResponse;
-import com.yo.day1.dto.student.StudentUpserRequest;
+import com.yo.day1.dto.student.StudentUpsertRequest;
 import com.yo.day1.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +32,12 @@ public class StudentController {
     }
 
     @PostMapping
-    ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentUpserRequest req){
+    ResponseEntity<StudentResponse> create(@Valid @RequestBody StudentUpsertRequest req){
         return ResponseEntity.ok(studentService.create(req));
     }
 
     @PutMapping(value = "/{id}")
-    ResponseEntity<StudentResponse> update(@PathVariable Long id, StudentUpserRequest req){
+    ResponseEntity<StudentResponse> update(@PathVariable Long id, StudentUpsertRequest req){
         return ResponseEntity.ok(studentService.update(id, req));
     }
 
@@ -48,13 +47,13 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/search")
-    public ApiResponse<List<StudentResponse>> searchStudents(@RequestParam String name) {
-        return ApiResponse.success(studentService.searchByName(name));
-    }
-
-    @GetMapping("/filter")
-    public ApiResponse<List<StudentResponse>> filterStudents(@RequestParam String performance) {
-        return ApiResponse.success(studentService.filterByPerformance(performance));
-    }
+//    @GetMapping("/search")
+//    public ApiResponse<List<StudentResponse>> searchStudents(@RequestParam String name) {
+//        return ApiResponse.success(studentService.searchByName(name));
+//    }
+//
+//    @GetMapping("/filter")
+//    public ApiResponse<List<StudentResponse>> filterStudents(@RequestParam String performance) {
+//        return ApiResponse.success(studentService.filterByPerformance(performance));
+//    }
 }

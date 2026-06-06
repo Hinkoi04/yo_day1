@@ -1,6 +1,6 @@
 package com.yo.day1.service.impl;
 
-import com.yo.day1.domain.entity.Courses;
+import com.yo.day1.domain.entity.Course;
 import com.yo.day1.repository.CourseResponsitory;
 import com.yo.day1.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -14,22 +14,22 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService {
     private final CourseResponsitory courseResponsitory;
 
-    public List<Courses> findAll(){
+    public List<Course> findAll(){
         return courseResponsitory.findAll();
     }
-    public List<Courses> findByCourseActive(){
+    public List<Course> findByCourseActive(){
         return courseResponsitory.findByCourseActive();
     }
 
-    public Optional<Courses> findById(Long id){
+    public Optional<Course> findById(Long id){
         return courseResponsitory.findById(id);
     }
 
-    public Courses save(Courses course){
+    public Course save(Course course){
         return courseResponsitory.save(course);
     }
 
-    public Courses update(Long id, Courses course) {
+    public Course update(Long id, Course course) {
         return courseResponsitory.findById(id).map(existingCourse -> {
             existingCourse.setCourseCode(course.getCourseCode());
             existingCourse.setName(course.getName());

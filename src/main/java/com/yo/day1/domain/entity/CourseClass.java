@@ -1,45 +1,41 @@
 package com.yo.day1.domain.entity;
 
 import com.yo.day1.domain.AuditableEntity;
-import com.yo.day1.domain.enums.CoursesClassStatus;
+import com.yo.day1.domain.enums.ClassStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "course_classes")
 public class CourseClass extends AuditableEntity {
 
-    @Column(columnDefinition = "varchar(20)")
-    private String classCore;
+    @Column(name = "class_code", columnDefinition = "varchar(20)")
+    private String codeCode;
 
+    @Column(columnDefinition = "varchar(100)")
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Courses courses;
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_slot_id", nullable = false)
-    private ScheduleSlots scheduleSlots;
+    @JoinColumn(name = "schedule_slot_id")
+    private ScheduleSlots slot;
 
     @ManyToOne
-    @JoinColumn(name = "main_teacher_id", nullable = false)
+    @JoinColumn(name = "main_teacher_id")
     private Teachers mainTeacher;
 
     @ManyToOne
-    @JoinColumn(name = "assistent_teacher_id")
+    @JoinColumn(name = "assistant_teacher_id")
     private Teachers assistantTeacher;
 
     private LocalDate startDate;
@@ -47,10 +43,10 @@ public class CourseClass extends AuditableEntity {
 
     private int maxStudents;
 
-    @Column(columnDefinition = "decimal",precision = 12,scale = 2)
-    private BigDecimal tuitionFee;
+    @Column(name = "tuition_fee", columnDefinition = "decimal(12,2)")
+    private double tuitionFee;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,length = 20)
-    private CoursesClassStatus status=CoursesClassStatus.OPEN;
+    @Column(nullable = false, length = 20)
+    private ClassStatus status = ClassStatus.OPEN;
 }
