@@ -2,11 +2,11 @@ package com.yo.day1.service.impl;
 
 import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Student;
-import com.yo.day1.dto.parent.ParentRespone;
+import com.yo.day1.dto.parent.ParentResponse;
 import com.yo.day1.dto.student.StudentResponse;
-import com.yo.day1.dto.student.StudentUpserRequest;
-import com.yo.day1.repository.ParentResponsitory;
-import com.yo.day1.repository.StudentResponsitory;
+import com.yo.day1.dto.student.StudentUpsertRequest;
+import com.yo.day1.repository.ParentRepository;
+import com.yo.day1.repository.StudentRepository;
 import com.yo.day1.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,62 +21,66 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentResponsitory studentResponsitory;
-    private final ParentResponsitory parentResponsitory;
-    private final ModelMapper  mapper;
+    private final StudentRepository studentRepository;
+    private final ParentRepository parentRepository;
+    private final ModelMapper mapper;
 
     private StudentResponse map(Student student) {
         return mapper.map(student, StudentResponse.class);
     }
-    public List<StudentResponse> findByAll(){
-        return studentResponsitory.findAll().stream()
-                .map(s -> map(s))
+
+    public List<StudentResponse> findByAll() {
+        return studentRepository.findAll().stream()
+                .map(s->map(s))
                 .toList();
     }
-    public Optional<StudentResponse> findById(Long id){
-        return studentResponsitory.findById(id)
+
+    public Optional<StudentResponse> findById(long id) {
+        return studentRepository.findById(id)
                 .map(this::map);
     }
 
-    public StudentResponse create(StudentUpserRequest req){
-        Student stu=mapper.map(req,Student.class);
-        parentResponsitory.findById(req.getParentId())
+    public StudentResponse create(StudentUpsertRequest req) {
+        Student stu = mapper.map(req, Student.class);
+        parentRepository.findById(req.getParentId())
                 .ifPresent(p->stu.setParent(p));
         stu.setCreatedAt(LocalDateTime.now());
         stu.setUpdatedAt(LocalDateTime.now());
-        Student result=studentResponsitory.save(stu);
-        return map(result);
-    }
-    public StudentResponse update(Long id, StudentUpserRequest req){
-        Student stu=mapper.map(req,Student.class);
-        stu.setId(id);
-        parentResponsitory.findById(req.getParentId())
-                .ifPresent(p->stu.setParent(p));
-        stu.setUpdatedAt(LocalDateTime.now());
-        Student result=studentResponsitory.save(stu);
+        Student result = studentRepository.save(stu);
         return map(result);
     }
 
-    public void delete(Long id) throws NotFoundException{
-        if (studentResponsitory.existsById(id)){
-            studentResponsitory.deleteById(id);
-        }else {
+    public StudentResponse update(Long id, StudentUpsertRequest req) {
+        Student stu = mapper.map(req, Student.class);
+        stu.setId(id);
+        parentRepository.findById(req.getParentId())
+                .ifPresent(p->stu.setParent(p));
+        stu.setUpdatedAt(LocalDateTime.now());
+        Student result = studentRepository.save(stu);
+        return map(result);
+    }
+
+    public void delete(Long id) throws NotFoundException {
+        if (studentRepository.existsById(id)) {
+            studentRepository.deleteById(id);
+        }  else {
             throw new NotFoundException("Delete error");
         }
     }
 
-    private StudentResponse map2(Student student){
+    private StudentResponse map2(Student student) {
         StudentResponse result = new StudentResponse();
-        ParentRespone pResult = new ParentRespone();
+        ParentResponse pResult = new ParentResponse();
         if (student.getParent() != null) {
             pResult.setId(student.getParent().getId());
             pResult.setFullName(student.getParent().getFullName());
             pResult.setGender(student.getParent().getGender());
+            pResult.setAddress(student.getParent().getAddress());
             pResult.setPhone(student.getParent().getPhone());
             pResult.setEmail(student.getParent().getEmail());
-            pResult.setAddress(student.getParent().getAddress());
             pResult.setRelationship(student.getParent().getRelationship());
         }
+
         result.setId(student.getId());
         result.setFullName(student.getFullName());
         result.setGender(student.getGender());
@@ -94,8 +98,9 @@ public class StudentServiceImpl implements StudentService {
 
         return result;
     }
+
     @Transactional(readOnly = true)
-    public Student getStudentForParent(Long studentId, Long parentId) {
+    public Student getStudentForParent(Long studentId, Long parentId) throws NotFoundException {
         Student student = getStudent(studentId);
         if (student.getParent() == null || !student.getParent().getId().equals(parentId)) {
             throw new org.springframework.security.access.AccessDeniedException("Student does not belong to current parent account");
@@ -103,8 +108,13 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public Student getStudent(Long id) {
-        return studentResponsitory.findById(id)
+    public Student getStudent(Long id) throws NotFoundException {
+        return studentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Student not found: " + id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudentResponse> findByParentId(Long parentId) {
+        return studentRepository.findByParentId(parentId).stream().map(this::map).toList();
     }
 }

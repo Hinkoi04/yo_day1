@@ -1,30 +1,33 @@
 package com.yo.day1.domain.entity;
 
 import com.yo.day1.domain.AuditableEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import com.yo.day1.domain.enums.TeacherRole;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "teachers")
 public class Teachers extends AuditableEntity {
-    @Column(columnDefinition = "varchar(20)")
+    @Column(name = "teacher_code", nullable = false, unique = true, length = 20)
     private String teacherCode;
 
-    @Column(columnDefinition = "varchar(100)")
+    @Column(name = "full_name", nullable = false, length = 100)
     private String fullName;
 
-    @Column(columnDefinition = "varchar(10)")
+    @Column(nullable = false, unique = true, length = 20)
     private String phone;
 
-    @Column(columnDefinition = "varchar(100)")
+    @Column(length = 100)
     private String email;
 
-    @Column(columnDefinition = "varchar(50)")
-    private String teacherRole;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "teacher_role", nullable = false, length = 20)
+    private TeacherRole teacherRole;
 
-    @Column(columnDefinition = "varchar(255)")
+    @Column(name = "cccd_image_url", length = 255)
     private String cccdImageUrl;
 
-    private byte isActive;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 }

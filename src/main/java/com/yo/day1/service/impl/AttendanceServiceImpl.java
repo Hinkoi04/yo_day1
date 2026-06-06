@@ -8,7 +8,7 @@ import com.yo.day1.domain.enums.NotificationType;
 import com.yo.day1.dto.attendance.AttendanceCreateRequest;
 import com.yo.day1.dto.attendance.AttendanceResponse;
 import com.yo.day1.repository.AttendanceRepository;
-import com.yo.day1.repository.StudentResponsitory;
+import com.yo.day1.repository.StudentRepository;
 import com.yo.day1.repository.CoursesClassRepository;
 import com.yo.day1.repository.NotificationRepository;
 import com.yo.day1.service.AttendanceService;
@@ -28,19 +28,19 @@ import java.util.List;
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final NotificationRepository notificationRepository;
-    private final StudentResponsitory studentRepository;
+    private final StudentRepository studentRepository;
     private final CoursesClassRepository courseClassRepository;
     private final AuthService authService;
     private final ModelMapper mapper;
 
     @Transactional
     public AttendanceResponse create(AttendanceCreateRequest request, String username) throws BadRequestException, NotFoundException {
-        CourseClass courseClass = courseClassRepository.findById(request.getCourseClassId()).orElseThrow(() -> new NotFoundException("Không tìm thấy lớp học với ID này"));
+        CourseClass courseClass = courseClassRepository.findById(request.getCourseClassId()).orElse(null);
         Student student = studentRepository.findById(request.getStudentId()).orElse(null);
 
         validateAttendanceDate(courseClass, request.getAttendanceDate());
 
-//        enrollmentService.getEnrollment(request.studentId(), request.courseClassId());
+//        enrollmentService.getEnrollment(request.studentId(); request.courseClassId());
 
         if (attendanceRepository.existsByCourseClassIdAndStudentIdAndAttendanceDate(
                 request.getCourseClassId(), request.getStudentId(), request.getAttendanceDate())) {
@@ -78,7 +78,9 @@ public class AttendanceServiceImpl implements AttendanceService {
             notification.setRelatedEntityType("attendance");
             notification.setRelatedEntityId(saved.getId());
             notificationRepository.save(notification);
-        }return toResponse(saved);
+        }
+
+        return toResponse(saved);
     }
 
     @Transactional(readOnly = true)
@@ -94,8 +96,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         if (courseClass.getEndDate() != null && attendanceDate.isAfter(courseClass.getEndDate())) {
             throw new BadRequestException("Attendance date must not be after class end date");
         }
-        if (courseClass.getScheduleSlots() != null
-                && !matchesScheduledWeekday(attendanceDate, (int) courseClass.getScheduleSlots().getWeekday())) {
+        if (courseClass.getSlot() != null
+                && !matchesScheduledWeekday(attendanceDate, (int) courseClass.getSlot().getWeekday())) {
             throw new BadRequestException("Attendance date does not match the class schedule");
         }
     }

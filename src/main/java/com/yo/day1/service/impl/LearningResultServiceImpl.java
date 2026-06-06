@@ -10,7 +10,7 @@ import com.yo.day1.dto.learningresult.LearningResultCreateRequest;
 import com.yo.day1.dto.learningresult.LearningResultResponse;
 import com.yo.day1.repository.CoursesClassRepository;
 import com.yo.day1.repository.LearningResultRepository;
-import com.yo.day1.repository.StudentResponsitory;
+import com.yo.day1.repository.StudentRepository;
 import com.yo.day1.service.AuthService;
 import com.yo.day1.service.CourseClassService;
 import com.yo.day1.service.LearningResultService;
@@ -21,6 +21,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +34,7 @@ public class LearningResultServiceImpl implements LearningResultService {
     private final CourseClassService courseClassService;
     private final AuthService authService;
     private final ModelMapper mapper;
-    private final StudentResponsitory studentResponsitory;
+    private final StudentRepository studentResponsitory;
     private final CoursesClassRepository coursesClassRepository;
 
     @Transactional

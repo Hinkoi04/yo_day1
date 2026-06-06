@@ -1,8 +1,14 @@
 package com.yo.day1.service.impl;
 
+import com.yo.day1.common.exception.BadRequestException;
+import com.yo.day1.common.exception.NotFoundException;
 import com.yo.day1.domain.entity.Parents;
-import com.yo.day1.repository.ParentResponsitory;
+import com.yo.day1.domain.entity.User;
+import com.yo.day1.repository.ParentRepository;
+import com.yo.day1.repository.UserRepository;
 import com.yo.day1.service.ParentService;
+import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +16,14 @@ import java.util.Optional;
 
 @Service
 public class ParentServiceImpl implements ParentService {
-    private final ParentResponsitory parentRespository;
+    private final ParentRepository parentRespository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-    public ParentServiceImpl(ParentResponsitory parentRespository) {
+    public ParentServiceImpl(ParentRepository parentRespository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.parentRespository = parentRespository;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
     public List<Parents> findAll() { return parentRespository.findAll(); }
@@ -34,5 +44,17 @@ public class ParentServiceImpl implements ParentService {
 
     public void delete(Long id) {
         parentRespository.deleteById(id);
+    }
+
+    @Transactional
+    public void resetPassword(Long id) {
+        Parents parent = parentRespository.findById(id)
+                .orElseThrow(()-> new NotFoundException("ko tom thay"));
+
+        User user=userRepository.findByParentId(id)
+                .orElseThrow(()-> new BadRequestException("Ch dc cấp tk"));
+        String newPassword=passwordEncoder.encode("123456");
+        user.setPasswordHash(newPassword);
+        userRepository.save(user);
     }
 }

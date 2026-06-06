@@ -50,4 +50,10 @@ public class ParentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/{id}/reset-password")
+    public ApiResponse<String> resetPassword(@PathVariable Long id) {
+        parentService.resetPassword(id);
+        return ApiResponse.success("Đã reset mật khẩu thành công! Mật khẩu mới là: 123456");
+    }
 }

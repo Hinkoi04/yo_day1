@@ -11,15 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
+        // Tạo object và cấu hình
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setAmbiguityIgnored(false);
         return modelMapper;
-    }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

@@ -17,84 +17,84 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CoursesClassServiceImpl implements CourseClassService {
-    private final CoursesClassRepository coursesClassRepository;
-    private final ScheduleSlotRepository scheduleSlotRepository;
-    private final CourseResponsitory courseResponsitory;
-    private final TeacherResponsitory teacherResponsitory;
 
-    private final ModelMapper mapper;
+    private final CoursesClassRepository courseClassRepository;
+
+    private final ScheduleSlotRepository scheduleSlotRepository;
+
+    private final CourseResponsitory courseRepository;
+
+    private final TeacherResponsitory teacherRepository;
+
     private final RoomRepository roomRepository;
 
-    CourseClassResponse toCourseClassResponse(CourseClass cc){
+    private final ModelMapper mapper;
+
+    CourseClassResponse toCourseClassResponse(CourseClass cc) {
         return mapper.map(cc, CourseClassResponse.class);
     }
+
+    CourseClass copyToCourseClass(CourseClassUpsertRequest req, CourseClass cc) {
+
+        if (req.getCourseId() != null) {
+            courseRepository.findById(req.getCourseId()).ifPresent(cc::setCourse);
+        }
+
+        if (req.getScheduleSlotId() != null) {
+            scheduleSlotRepository.findById(req.getScheduleSlotId()).ifPresent(cc::setSlot);
+        }
+
+        if (req.getRoomId() != null) {
+            roomRepository.findById(req.getRoomId()).ifPresent(cc::setRoom);
+        }
+
+        if (req.getMainTeacherId() != null) {
+            teacherRepository.findById(req.getMainTeacherId()).ifPresent(cc::setMainTeacher);
+        }
+
+        if (req.getAssistantTeacherId() != null) {
+            teacherRepository.findById(req.getAssistantTeacherId()).ifPresent(cc::setAssistantTeacher);
+        }
+
+        return cc;
+    }
+
     public List<CourseClassResponse> findAll() {
-        return coursesClassRepository.findAll().stream()
+        return courseClassRepository.findAll().stream()
                 .map(this::toCourseClassResponse)
                 .toList();
     }
 
-    public Optional<CourseClassResponse>  findById(Long id) {
-        return coursesClassRepository.findById(id)
+    public Optional<CourseClassResponse> findById(Long id) {
+        return courseClassRepository.findById(id)
                 .map(this::toCourseClassResponse);
     }
 
-    public CourseClassResponse create(CourseClassUpsertRequest req){
+    public CourseClassResponse create(CourseClassUpsertRequest req) {
         CourseClass cc = mapper.map(req, CourseClass.class);
-        if(req.getCourseId()!=null){
-            courseResponsitory.findById(req.getCourseId()).ifPresent(cc::setCourses);
-        }
-        if (req.getScheduleSlotId()!=null){
-            scheduleSlotRepository.findById(req.getScheduleSlotId()).ifPresent(cc::setScheduleSlots);
-        }
-        if(req.getRoomId()!=null){
-            roomRepository.findById(req.getRoomId()).ifPresent(cc::setRoom);
-        }
-        if (req.getMainTeacherId()!=null){
-            teacherResponsitory.findById(req.getMainTeacherId()).ifPresent(cc::setMainTeacher);
-        }
-        if(req.getAssistantTeacherId()!=null){
-            teacherResponsitory.findById(req.getAssistantTeacherId()).ifPresent(cc::setAssistantTeacher);
-        }
+        copyToCourseClass(req, cc);
 
-        CourseClass result = coursesClassRepository.save(cc);
+        CourseClass result = courseClassRepository.save(cc);
         return toCourseClassResponse(result);
     }
 
-    public CourseClassResponse update(Long id, CourseClassUpsertRequest req){
-        Optional<CourseClass> courseClass = coursesClassRepository.findById(id);
+    public CourseClassResponse update(Long id, CourseClassUpsertRequest req) throws NotFoundException {
+        Optional<CourseClass> courseClass = courseClassRepository.findById(id);
         if (courseClass.isPresent()) {
             CourseClass cc = courseClass.get();
-            if (req.getCourseId() != null) {
-                courseResponsitory.findById(req.getCourseId()).ifPresent(cc::setCourses);
-            }
 
-            if (req.getCourseId() != null) {
-                courseResponsitory.findById(req.getCourseId()).ifPresent(cc::setCourses);
-            }
-            if (req.getScheduleSlotId() != null) {
-                scheduleSlotRepository.findById(req.getScheduleSlotId()).ifPresent(cc::setScheduleSlots);
-            }
-            if (req.getRoomId() != null) {
-                roomRepository.findById(req.getRoomId()).ifPresent(cc::setRoom);
-            }
-            if (req.getMainTeacherId() != null) {
-                teacherResponsitory.findById(req.getMainTeacherId()).ifPresent(cc::setMainTeacher);
-            }
-            if (req.getAssistantTeacherId() != null) {
-                teacherResponsitory.findById(req.getAssistantTeacherId()).ifPresent(cc::setAssistantTeacher);
-            }
+            copyToCourseClass(req, cc);
 
-            CourseClass result = coursesClassRepository.save(cc);
+            CourseClass result = courseClassRepository.save(cc);
             return toCourseClassResponse(result);
-        }else {
-            throw new NotFoundException("CoursesClass not Exists");
+        } else {
+            throw new NotFoundException("Course not exists");
         }
     }
+
     @Transactional(readOnly = true)
-    public CourseClass getCourseClass(Long id) {
-        return coursesClassRepository.findById(id)
+    public CourseClass getCourseClass(Long id) throws NotFoundException {
+        return courseClassRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Course class not found: " + id));
     }
-
 }

@@ -3,7 +3,7 @@ package com.yo.day1.dto.student;
 
 import com.yo.day1.domain.enums.Gender;
 import com.yo.day1.domain.enums.StudentStatus;
-import com.yo.day1.dto.parent.ParentRespone;
+import com.yo.day1.dto.parent.ParentResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +13,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentResponse {
+
     private Long id;
 
     private String studentCode;
@@ -33,17 +35,16 @@ public class StudentResponse {
 
     private String phone;
 
-    private String description;
-
-    private ParentRespone parent;
+    private ParentResponse parent;
 
     private StudentStatus status = StudentStatus.ACTIVE;
 
-    private BigDecimal latestScore = BigDecimal.ZERO;
+    private float latestScore = 0;
 
     private String note;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
 }

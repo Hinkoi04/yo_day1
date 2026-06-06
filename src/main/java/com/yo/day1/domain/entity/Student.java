@@ -36,19 +36,16 @@ public class Student extends AuditableEntity {
     @Column(length = 20)
     private String phone;
 
-    @Column(length = 255)
-    private String description;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
     private Parents parent;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private StudentStatus status = StudentStatus.ACTIVE;
+    @Column(name = "status", nullable = false)
+    private StudentStatus status;
 
-    @Column(name = "latest_score", precision = 5, scale = 2)
-    private BigDecimal latestScore = BigDecimal.ZERO;
+    @Column(name = "latest_score", columnDefinition = "decimal(5,2)")
+    private float latestScore = 0;
 
     @Column(length = 255)
     private String note;

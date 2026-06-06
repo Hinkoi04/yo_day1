@@ -18,6 +18,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -65,6 +68,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleUnknown(Exception ex) {
         log.error("Unhandled application error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.errorMessage("Internal server error"));
+                .body(ApiResponse.errorMessage(ex.getMessage() != null ? "Internal server error: " + ex.getMessage() : "Internal server error"));
     }
 }

@@ -10,12 +10,12 @@ import java.time.LocalDate;
 @Data
 public class LearningResultCreateRequest {
     @NotNull
-    private Long studentId;
+    Long studentId;
     @NotNull
-    private Long courseClassId;
+    Long courseClassId;
     @NotNull
-    private LocalDate resultMonth;
-    @DecimalMin("0.0")
-    private BigDecimal score;
-    private String teacherComment;
+    LocalDate resultMonth;
+    //    @DecimalMin("0.0")
+    float score;
+    String teacherComment;
 }
